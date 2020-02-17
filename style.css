@@ -1,0 +1,47 @@
+@charset 'utf-8';
+
+html {
+    font-size: 14px;
+}
+
+body {
+    font-family: 'BIZ UDPGothic', '游ゴシック体', 'Yu Gothic', YuGothic, Meiryo, 'メイリオ', sans-serif;
+}
+
+label {
+    font-weight: 700;
+}
+
+input[type="number"].form-control {
+    width: 70px;
+    display: inline-block;
+}
+
+#preview {
+    box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.1);
+    height: 400px;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.col-settings {
+    box-shadow: -10px 0 20px 0px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.item {
+    width: 50px;
+    height: 50px;
+    background: rgb(77, 110, 165);
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+}

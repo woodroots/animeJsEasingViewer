@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime.jsのイージングを確認できるツール</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="row no-gutters">
+
+            <div class="col-12 col-md-6 col-settings">
+                <div class="jumbotron bg-transparent text-center">
+                    <h1>Anime.jsのイージングを確認できるツール</h1>
+                    <p class="border-top pt-3 mt-3">分かりにくいAnime.jsのイージングをざっくりと確認できるツールです。</p>
+                </div>
+
+                <div class="px-3">
+
+
+                    <div class="form-group mb-4 pb-4 border-bottom">
+                        <div class="form-check mb-2">
+
+                            <input type="radio" class="form-check-input" id="presetsEasing" name="anime" v-model="anime"
+                                value="presets" v-on:change="update">
+                            <label for="presetsEasing" class="form-check-label">プリセットのイージング</label>
+                        </div>
+                        <select id="presetsEasing" class="form-control" v-model="presetsEasing" v-on:change="update"
+                            :disabled="anime !== 'presets'">
+                            <option v-for="(item,i) in presets" :key="i" :value="item">
+                                {{ item }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-4 pb-4 border-bottom">
+                        <div class="form-check mb-2">
+
+                            <input type="radio" class="form-check-input" id="cubicBezier" name="anime" v-model="anime"
+                                value="bezier" v-on:change="update">
+                            <label for="cubicBezier" class="form-check-label">cubicBezier</label>
+                        </div>
+                        cubicBezier(
+                        <input type="number" min="0" max="1" class=" form-control" v-model="bezier[0]"
+                            v-on:change="update" :disabled="anime !== 'bezier'">,
+                        <input type="number" class="form-control" v-model="bezier[1]" v-on:change="update"
+                            :disabled="anime !== 'bezier'">,
+                        <input type="number" class="form-control" v-model="bezier[2]" min="0" max="1"
+                            v-on:change="update" :disabled="anime !== 'bezier'">,
+                        <input type="number" class="form-control" v-model="bezier[3]" v-on:change="update"
+                            :disabled="anime !== 'bezier'">
+                        )
+                    </div>
+                    <div class="form-group mb-4 pb-4 border-bottom">
+                        <div class="form-check mb-2">
+
+                            <input type="radio" class="form-check-input" id="spring" name="anime" v-model="anime"
+                                value="spring" v-on:change="update">
+                            <label for="spring" class="form-check-label">spring</label>
+                        </div>
+                        spring(
+                        <input type="number" min="0" max="0" class="form-control" v-model="spring[0]"
+                            v-on:change="update" :disabled="anime !== 'spring'">,
+                        <input type="number" min="0" max="0" class="form-control" v-model="spring[1]"
+                            v-on:change="update" :disabled="anime !== 'spring'">,
+                        <input type="number" min="0" max="0" class="form-control" v-model="spring[2]"
+                            v-on:change="update" :disabled="anime !== 'spring'">,
+                        <input type="number" min="0" max="0" class="form-control" v-model="spring[3]"
+                            v-on:change="update" :disabled="anime !== 'spring'">
+                        )
+                        <div class="mt-3 bg-light p-2">
+                            第1引数：Mass（質量） Min:0 Max:100<br>
+                            第2引数：Stiffness（剛性） Min:0 Max:100<br>
+                            第3引数：Damping（弾性） Min:0 Max:100<br>
+                            第4引数：Velocity（速度） Min:0 Max:100</div>
+                    </div>
+                    <div class="form-group mb-4 pb-4 border-bottom">
+                        <div class="form-check mb-2">
+
+                            <input type="radio" class="form-check-input" id="elastic" name="anime" v-model="anime"
+                                value="elastic" v-on:change="update">
+                            <label for="elastic" class="form-check-label">elastic</label>
+                        </div>
+                        <select id="elastic" class="form-control d-inline-block" style="width: auto"
+                            v-model="elasticType" v-on:change="update" :disabled="anime !== 'elastic'">
+
+                            <option v-for="(item,i) in elastics" :key="i" :value="item">{{ item }}</option>
+                        </select>
+                        (
+                        <input type="number" min="1" max="10" class="form-control" v-model="elasticVal[0]"
+                            v-on:change="update" :disabled="anime !== 'elastic'">,
+                        <input type="number" min="0.1" max="2" class="form-control" v-model="elasticVal[1]"
+                            v-on:change="update" :disabled="anime !== 'elastic'">
+                        )
+                        <div class="mt-3 bg-light p-2">
+                            第1引数：Amplitude Min:1 Max:10<br>
+                            Controls the overshoot of the curve
+                            <br>
+                            第2引数：Period Min:0.1 Max:2<br>Controls how many times the curve goes back and forth</div>
+
+
+                    </div>
+                    <div class="form-group mb-4 pb-4 border-bottom">
+                        <div class="form-check mb-2">
+
+                            <input type="radio" class="form-check-input" id="steps" name="anime" v-model="anime"
+                                value="steps" v-on:change="update">
+                            <label for="steps" class="form-check-label">steps</label>
+                        </div>
+                        steps
+                        (
+                        <input type="number" min="1" class="form-control" v-model="steps" v-on:change="update"
+                            :disabled="anime !== 'steps'">
+                        )
+                    </div>
+
+                    <div class="form-group mb-4 pb-4 border-bottom">
+                        <div class="mb-2">
+
+
+                            <label for="duration">共通オプション</label>
+                        </div>
+                        速さ（duration）:
+                        <input type="text" id="duration" class="form-control" v-model="duration" v-on:change="update">
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-12 col-md-6 bg-light">
+                <div class="p-5 position-sticky sticky-top">
+                    <h2>Preview</h2>
+                    <div id="preview" class="bg-white p-3 mb-5 position-relative">
+                        <div class="item item-h"></div>
+                        <div class="item item-v"></div>
+                    </div>
+                    <h2>Code</h2>
+                    <div id="code" class="bg-dark p-3">
+                        <pre class=" text-white" v-html="code"></pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
